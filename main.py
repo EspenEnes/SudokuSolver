@@ -14,6 +14,9 @@ import json
 import time
 
 
+
+
+
 class NotEmptyValidator(QValidator):
     def validate(self, text, pos):
         if text in ["1", "2", "3", "4", "5", "6", "7", "8", "9", ""]:
@@ -61,7 +64,6 @@ class Soduku(QtWidgets.QMainWindow, soduku_window.Ui_MainWindow):
     def __init__(self, parent=None):
         super(Soduku, self).__init__(parent)
         self.setupUi(self)
-        self.pushButton.toggled.connect(self.enable)
         self.pushButton_2.clicked.connect(self.solve)
         self.initLine()
         self.colums = ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
@@ -76,9 +78,9 @@ class Soduku(QtWidgets.QMainWindow, soduku_window.Ui_MainWindow):
             data[column] = [v for k, v in sorted({x.objectName(): x.text() for x in
                                                   self.findChildren(QtWidgets.QLineEdit,
                                                                     QtCore.QRegExp(f"{column}"))}.items())]
-        # self.df = pd.DataFrame.from_dict(json.load(open("test.json")))
+        self.df = pd.DataFrame.from_dict(json.load(open("test.json")))
 
-        self.df = pd.DataFrame.from_dict(data, dtype="int")
+        # self.df = pd.DataFrame.from_dict(data, dtype="int")
         self.model = manager(self.df)
 
         self.mapperA = QDataWidgetMapper()
@@ -206,9 +208,6 @@ class Soduku(QtWidgets.QMainWindow, soduku_window.Ui_MainWindow):
         self.view = QtWidgets.QTableView()
         self.view.setModel(self.model)
 
-    def enable(self, checked):
-        for child in self.findChildren(QtWidgets.QLineEdit):
-            child.setEnabled(checked)
 
     def initLine(self):
         for child in self.findChildren(QtWidgets.QLineEdit):

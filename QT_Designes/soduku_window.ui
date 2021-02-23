@@ -3265,27 +3265,6 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QPushButton" name="pushButton">
-         <property name="font">
-          <font>
-           <pointsize>20</pointsize>
-          </font>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="text">
-          <string>Edit</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="pushButton_2">
          <property name="font">
           <font>
@@ -3399,7 +3378,6 @@
   <tabstop>G9</tabstop>
   <tabstop>H9</tabstop>
   <tabstop>I9</tabstop>
-  <tabstop>pushButton</tabstop>
   <tabstop>pushButton_2</tabstop>
  </tabstops>
  <resources/>
