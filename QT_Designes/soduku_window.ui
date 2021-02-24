@@ -3265,6 +3265,13 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>Clear</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="pushButton_2">
          <property name="font">
           <font>

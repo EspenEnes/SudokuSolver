@@ -60,6 +60,14 @@ class manager(QtCore.QAbstractTableModel):
             return True
         return True
 
+    def clearData(self):
+        print(self._data)
+        self._data = pd.DataFrame("",["0","1","2","3","4","5","6","7","8"],["A","B","C","D","E","F","G","H","I"])
+        index1 = self.createIndex(0, 0)
+        index2 = self.createIndex(8, 8)
+        self.dataChanged.emit(index1, index2)
+
+
 class Soduku(QtWidgets.QMainWindow, soduku_window.Ui_MainWindow):
     def __init__(self, parent=None):
         super(Soduku, self).__init__(parent)
@@ -71,6 +79,7 @@ class Soduku(QtWidgets.QMainWindow, soduku_window.Ui_MainWindow):
         self.progressBar.setMinimum(0)
         self.progressBar.setValue(0)
         # self.progressBar.hide()
+        self.pushButton.clicked.connect(self.clear)
 
         data = {}
 
@@ -208,6 +217,9 @@ class Soduku(QtWidgets.QMainWindow, soduku_window.Ui_MainWindow):
         self.view = QtWidgets.QTableView()
         self.view.setModel(self.model)
 
+    def clear(self):
+        self.model.clearData()
+
 
     def initLine(self):
         for child in self.findChildren(QtWidgets.QLineEdit):
@@ -237,14 +249,17 @@ class Soduku(QtWidgets.QMainWindow, soduku_window.Ui_MainWindow):
 
 
     def result(self, dataframe):
+        print(dataframe)
         self.model._data = dataframe
         index1 = self.model.createIndex(0, 0)
         index2 = self.model.createIndex(8, 8)
         self.model.dataChanged.emit(index1, index2)
 
         if "" in dataframe.values:
+            pass
             # If easy solved gave no solution, try to to guess one number and solve!
-            self.solve_2(dataframe)
+            # self.solve_2(dataframe)
+
 
 
 
@@ -299,28 +314,33 @@ class Solve(QRunnable):
         row = int(index[0])
         col = index[1]
         col_i = dataframe.columns.get_loc(col)
-        if int(row) > 0:
-            Hor1 = dataframe.iloc[int(row) - 1, :]
-        else:
-            Hor1 = self.a
-        if int(row) < 8:
-            Hor2 = dataframe.iloc[int(row) + 1, :]
-        else:
-            Hor2 = self.a
-        if col_i > 0:
-            Ver1 = dataframe.iloc[:, col_i - 1]
-        else:
-            Ver1 = self.a
-        if col_i < 8:
-            Ver2 = dataframe.iloc[:, col_i + 1]
-        else:
-            Ver2 = self.a
+        for number in missing:
+            if int(row) > 0:
+                Hor1 = dataframe.iloc[int(row) - 1, :]
+            else:
+                Hor1 = self.a
+                continue
+            if int(row) < 8:
+                Hor2 = dataframe.iloc[int(row) + 1, :]
+            else:
+                Hor2 = self.a
+                continue
+            if col_i > 0:
+                Ver1 = dataframe.iloc[:, col_i - 1]
+            else:
+                Ver1 = self.a
+                continue
+            if col_i < 8:
+                Ver2 = dataframe.iloc[:, col_i + 1]
+            else:
+                Ver2 = self.a
+                continue
 
-        if missing[0] in Hor1.values:
-            if missing[0] in Hor2.values:
-                if missing[0] in Ver1.values:
-                    if missing[0] in Ver2.values:
-                        return True
+            if number in Hor1.values:
+                if number in Hor2.values:
+                    if number in Ver1.values:
+                        if number in Ver2.values:
+                            return True
         return False
 
 
@@ -342,7 +362,7 @@ class Solve(QRunnable):
                     break
 
                 #if neigboring rows,columns contains number, insert number
-                if self.getneigbors(dataframe,missing[0],index):
+                if self.getneigbors(dataframe,missing,index):
                     self.run = True
                     self.InsertNumber(dataframe, missing[0], index, test=test)
 
